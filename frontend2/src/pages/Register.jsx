@@ -15,7 +15,7 @@ export default function Register() {
   };
 
   const submit = async () => {
-    await API.post("/auth/register", form);
+    await API.post("/api/auth/register", form);
     alert("Registered");
   };
 
