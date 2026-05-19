@@ -6,7 +6,7 @@ export default function Dashboard() {
 const approve = async (id) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  await API.put(`/bookings/${id}/approve`, {}, {
+  await API.put(`/api/bookings/${id}/approve`, {}, {
     headers: {
       Authorization: `Bearer ${user.token}`
     }
@@ -17,7 +17,7 @@ const approve = async (id) => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    API.get("/bookings/host", {
+    API.get("/api/bookings/host", {
       headers: {
         Authorization: `Bearer ${user.token}`
       }
@@ -97,7 +97,7 @@ const approve = async (id) => {
               <button
                 onClick={async () => {
                   const user = JSON.parse(localStorage.getItem("user"));
-                  await API.put(`/bookings/${b._id}/approve`, {}, {
+                  await API.put(`/api/bookings/${b._id}/approve`, {}, {
                     headers: { Authorization: `Bearer ${user.token}` }
                   });
 
@@ -122,7 +122,7 @@ const approve = async (id) => {
               <button
                 onClick={async () => {
                   const user = JSON.parse(localStorage.getItem("user"));
-                  await API.put(`/bookings/${b._id}/reject`, {}, {
+                  await API.put(`/api/bookings/${b._id}/reject`, {}, {
                     headers: { Authorization: `Bearer ${user.token}` }
                   });
 
