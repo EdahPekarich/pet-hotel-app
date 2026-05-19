@@ -11,10 +11,10 @@ export default function HotelDetails() {
   const [bookedDates, setBookedDates] = useState([]);
 
   useEffect(() => {
-    API.get("/hotels").then((res) => {
+    API.get("/api/hotels").then((res) => {
       const found = res.data.find((h) => h._id === id);
       setHotel(found);
-      API.get(`/hotels/${id}/booked-dates`)
+      API.get(`/api/hotels/${id}/booked-dates`)
   .then(res => setBookedDates(res.data));
     });
   }, [id]);
@@ -35,7 +35,7 @@ const isDateBlocked = (date) => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    await API.post("/bookings", {
+    await API.post("/api/bookings", {
       hotelId: id,
       checkIn,
       checkOut,
