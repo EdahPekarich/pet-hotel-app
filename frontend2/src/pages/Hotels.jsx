@@ -8,11 +8,11 @@ export default function Hotels() {
   const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
-    API.get("/hotels").then((res) => setHotels(res.data));
+    API.get("/api/hotels").then((res) => setHotels(res.data));
   }, []);
 
   const searchHotels = () => {
-    API.get(`/hotels?city=${city}&maxPrice=${maxPrice}`)
+    API.get(`/api/hotels?city=${city}&maxPrice=${maxPrice}`)
       .then((res) => setHotels(res.data));
   };
 
@@ -127,7 +127,7 @@ export default function Hotels() {
               €{h.pricePerNight} / night
             </p>
 
-            <Link to={`/hotel/${h._id}`}>
+            <Link to={`/api/hotel/${h._id}`}>
               <button style={{
                 marginTop: 10,
                 width: "100%",
