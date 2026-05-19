@@ -15,7 +15,7 @@ export default function CreateHotel() {
       const user = JSON.parse(localStorage.getItem("user"));
 
       await API.post(
-        "/hotels",
+        "/api/hotels",
         {
           name: form.name,
           pricePerNight: Number(form.pricePerNight),
