@@ -150,28 +150,18 @@ exports.rejectBooking = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    // 🔥 sigurnosna provjera (OVO TI JE PUCALO)
-    if (!booking.hotel || !booking.hotel.owner) {
-      return res.status(400).json({ message: "Invalid hotel data" });
-    }
-
-    // owner check
-    if (booking.hotel.owner.toString() !== req.user.id) {
+    // owner check (sigurno)
+    if (!booking.hotel || booking.hotel.owner.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
 
     booking.status = "REJECTED";
     await booking.save();
 
-    await Notification.create({
-      user: booking.user,
-      message: "Your booking was REJECTED ❌",
-      type: "REJECT"
-    });
-
     res.json(booking);
+
   } catch (err) {
-    console.log("REJECT ERROR:", err);
+    console.log("REJECT ERROR:", err); // 🔥 bitno za debug
     res.status(500).json({ error: err.message });
   }
 };
