@@ -13,7 +13,7 @@ const app = express();
 
 // middleware
 app.use(cors({
-  origin: "https://tvojfrontend.vercel.app"
+  origin: "https://pet-hotel-app-git-main-pekis-projects-b3a1c871.vercel.app/"
 }));
 app.use(express.json());
 
