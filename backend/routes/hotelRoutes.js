@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   createHotel,
   getHotels,
-  getBookedDates 
+  getHotelById,   // 🔥 DODANO
+  getBookedDates,
 } = require("../controllers/hotelController");
 
 const protect = require("../middleware/authMiddleware");
@@ -12,7 +13,13 @@ const protect = require("../middleware/authMiddleware");
 // CREATE HOTEL
 router.post("/", protect, createHotel);
 
-// SEARCH HOTELS (PUBLIC)
+// GET ALL HOTELS
 router.get("/", getHotels);
+
+// 🔥 GET SINGLE HOTEL (FIX ZA 404)
+router.get("/:id", getHotelById);
+
+// GET BOOKED DATES
 router.get("/:id/booked-dates", getBookedDates);
+
 module.exports = router;
