@@ -6,9 +6,12 @@ import "leaflet/dist/leaflet.css";
 export default function HotelMap() {
   const [hotels, setHotels] = useState([]);
 
-  useEffect(() => {
-    API.get("/api/hotels").then((res) => setHotels(res.data));
-  }, []);
+useEffect(() => {
+  API.get("/api/hotels").then((res) => {
+    console.log("HOTELS FROM API:", res.data);
+    setHotels(res.data);
+  });
+}, []);
 
   return (
     <div style={{ position: "relative" }}>
