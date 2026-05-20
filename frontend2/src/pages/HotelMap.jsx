@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 
 export default function HotelMap() {
   const [hotels, setHotels] = useState([]);
-
+console.log("MAP PAGE LOADED");
 useEffect(() => {
   API.get("/api/hotels").then((res) => {
     console.log("HOTELS FROM API:", res.data);
