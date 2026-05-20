@@ -12,8 +12,30 @@ dotenv.config();
 const app = express();
 
 // middleware
-app.use(cors());
 app.use(express.json());
+
+// ✅ CORS FIX (production safe)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://pet-hotel-app.vercel.app",
+  "https://pet-hotel-1g2asunf9-pekis-projects-b3a1c871.vercel.app"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS not allowed: " + origin));
+    },
+    credentials: true,
+  })
+);
 
 // connect database
 connectDB();
