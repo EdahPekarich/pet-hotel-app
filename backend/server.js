@@ -12,7 +12,9 @@ dotenv.config();
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://tvojfrontend.vercel.app"
+}));
 app.use(express.json());
 
 // connect database
