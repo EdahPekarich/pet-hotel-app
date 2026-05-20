@@ -1,7 +1,7 @@
 const Hotel = require("../models/Hotel");
-const Booking = require("../models/Booking"); // 🔥 FIX
+const Booking = require("../models/Booking");
 
-// CREATE HOTEL
+// ---------------- CREATE HOTEL ----------------
 exports.createHotel = async (req, res) => {
   try {
     const hotel = await Hotel.create({
@@ -28,17 +28,37 @@ exports.createHotel = async (req, res) => {
   }
 };
 
-// GET ALL HOTELS
+// ---------------- GET ALL HOTELS (WITH SEARCH) ----------------
 exports.getHotels = async (req, res) => {
   try {
-    const hotels = await Hotel.find();
+    const { city, maxPrice, petType } = req.query;
+
+    let filter = {};
+
+    // CITY SEARCH (case-insensitive)
+    if (city) {
+      filter["location.city"] = { $regex: city, $options: "i" };
+    }
+
+    // PRICE FILTER
+    if (maxPrice) {
+      filter.pricePerNight = { $lte: Number(maxPrice) };
+    }
+
+    // PET TYPE FILTER
+    if (petType) {
+      filter.petTypes = petType;
+    }
+
+    const hotels = await Hotel.find(filter);
+
     res.json(hotels);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// GET SINGLE HOTEL
+// ---------------- GET SINGLE HOTEL ----------------
 exports.getHotelById = async (req, res) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
@@ -53,14 +73,39 @@ exports.getHotelById = async (req, res) => {
   }
 };
 
-// GET BOOKED DATES
+// ---------------- GET BOOKED DATES ----------------
 exports.getBookedDates = async (req, res) => {
   try {
     const bookings = await Booking.find({
-      hotelId: req.params.id, // 🔥 FIXED
+      hotel: req.params.id, // FIXED (bilo hotelId)
     });
 
     res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// ---------------- HOST ANALYTICS ----------------
+exports.getHostAnalytics = async (req, res) => {
+  try {
+    const hotels = await Hotel.find({ owner: req.user.id });
+    const hotelIds = hotels.map((h) => h._id);
+
+    const bookings = await Booking.find({
+      hotel: { $in: hotelIds },
+      status: "APPROVED",
+    });
+
+    const totalRevenue = bookings.reduce(
+      (sum, b) => sum + (b.totalPrice || 0),
+      0
+    );
+
+    res.json({
+      totalBookings: bookings.length,
+      totalRevenue,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
