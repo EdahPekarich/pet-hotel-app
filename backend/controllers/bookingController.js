@@ -150,7 +150,6 @@ exports.rejectBooking = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    // owner check (sigurno)
     if (!booking.hotel || booking.hotel.owner.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
@@ -161,27 +160,33 @@ exports.rejectBooking = async (req, res) => {
     res.json(booking);
 
   } catch (err) {
-    console.log("REJECT ERROR:", err); // 🔥 bitno za debug
+    console.log("REJECT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };
-// ANALYTICS
 exports.getHostAnalytics = async (req, res) => {
   try {
     const hotels = await Hotel.find({ owner: req.user.id });
-    const hotelIds = hotels.map((h) => h._id);
+
+    const hotelIds = hotels.map(h => h._id);
 
     const bookings = await Booking.find({
       hotel: { $in: hotelIds },
+      status: "APPROVED"
     });
 
-    const totalRevenue = bookings.reduce((sum, b) => sum + b.totalPrice, 0);
+    const totalRevenue = bookings.reduce(
+      (sum, b) => sum + (b.totalPrice || 0),
+      0
+    );
 
     res.json({
       totalBookings: bookings.length,
       totalRevenue,
     });
+
   } catch (err) {
+    console.log("ANALYTICS ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };
