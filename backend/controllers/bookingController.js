@@ -52,7 +52,9 @@ exports.createBooking = async (req, res) => {
 // MY BOOKINGS
 exports.getMyBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user.id }).populate("hotel");
+    const bookings = await Booking.find({ user: req.user.id })
+      .populate("hotel");
+
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: err.message });
