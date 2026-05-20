@@ -12,9 +12,8 @@ dotenv.config();
 const app = express();
 
 // middleware
-app.use(cors({
-  origin: "https://pet-hotel-app-git-main-pekis-projects-b3a1c871.vercel.app"
-}));
+const cors = require("cors");
+
 app.use(express.json());
 
 // connect database
