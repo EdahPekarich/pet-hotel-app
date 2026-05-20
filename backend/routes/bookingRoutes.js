@@ -12,21 +12,21 @@ const {
 } = require("../controllers/bookingController");
 
 const protect = require("../middleware/authMiddleware");
+const role = require("../middleware/roleMiddleware");
 
-// USER
+
+// ---------------- USER ----------------
 router.post("/", protect, createBooking);
 router.get("/my", protect, getMyBookings);
-
-// HOST
-router.get("/host", protect, getHostBookings);
-
-// APPROVAL SYSTEM (HOST)
-router.put("/:id/approve", protect, approveBooking);
-router.put("/:id/reject", protect, rejectBooking);
-
-// OPTIONAL
 router.delete("/:id", protect, cancelBooking);
 
-router.get("/analytics", protect, getHostAnalytics);
+
+// ---------------- HOST ----------------
+router.get("/host", protect, role("HOST"), getHostBookings);
+
+router.put("/:id/approve", protect, role("HOST"), approveBooking);
+router.put("/:id/reject", protect, role("HOST"), rejectBooking);
+
+router.get("/analytics", protect, role("HOST"), getHostAnalytics);
 
 module.exports = router;
