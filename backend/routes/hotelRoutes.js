@@ -6,25 +6,32 @@ const {
   getHotels,
   getHotelById,
   getBookedDates,
+  getHostAnalytics,
 } = require("../controllers/hotelController");
 
 const protect = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
 
 
-// ---------------- PUBLIC ----------------
+// ---------------- PUBLIC ROUTES ----------------
 
 // GET ALL HOTELS
 router.get("/", getHotels);
 
-// GET SINGLE HOTEL (MORA BITI PRIJE /:id/anything)
-router.get("/:id", getHotelById);
 
-// GET BOOKED DATES
+// 🔥 IMPORTANT: STATIC ROUTES MUST BE BEFORE ":id"
+router.get("/analytics", protect, role("HOST"), getHostAnalytics);
+
+
+// GET BOOKED DATES (must be before /:id)
 router.get("/:id/booked-dates", getBookedDates);
 
 
-// ---------------- PROTECTED (HOST) ----------------
+// GET SINGLE HOTEL (LAST dynamic route)
+router.get("/:id", getHotelById);
+
+
+// ---------------- PROTECTED (HOST ACTIONS) ----------------
 
 // CREATE HOTEL
 router.post("/", protect, role("HOST"), createHotel);
