@@ -10,9 +10,27 @@ export default function CreateHotel() {
     capacity: ""
   });
 
+  // 🌍 GEOLOCATION (city → lat/lng)
+  const getCoordinates = async (city, country) => {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${city},${country}`
+    );
+
+    const data = await res.json();
+
+    if (!data.length) return null;
+
+    return {
+      lat: parseFloat(data[0].lat),
+      lng: parseFloat(data[0].lon),
+    };
+  };
+
   const create = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
+
+      const coords = await getCoordinates(form.city, form.country);
 
       await API.post(
         "/api/hotels",
@@ -22,7 +40,8 @@ export default function CreateHotel() {
           capacity: Number(form.capacity),
           location: {
             city: form.city,
-            country: form.country
+            country: form.country,
+            coordinates: coords || { lat: 46, lng: 14 } // fallback
           }
         },
         {
