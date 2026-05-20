@@ -28,11 +28,11 @@ export default function Dashboard() {
     }).then(res => setBookings(res.data));
 
     // analytics (🔥 NOVO)
-    API.get("/api/hotels/analytics", {
-      headers: {
-        Authorization: `Bearer ${user.token}`
-      }
-    }).then(res => setAnalytics(res.data));
+    API.get("/api/bookings/analytics", {
+  headers: {
+    Authorization: `Bearer ${user.token}`
+  }
+}).then(res => setAnalytics(res.data));
 
   }, []);
 
