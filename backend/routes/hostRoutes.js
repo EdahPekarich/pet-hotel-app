@@ -5,22 +5,16 @@ const protect = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
 
 const {
-  createHotel,
-  getMyHotels,
-  updateHotel,
-  deleteHotel,
+  getHostBookings,
   getHostAnalytics
-} = require("../controllers/hotelController");
-
+} = require("../controllers/bookingController");
 
 // ---------------- HOST ONLY ----------------
-router.post("/", protect, role("HOST"), createHotel);
 
-// IMPORTANT: specifične rute prije :id
-router.get("/my", protect, role("HOST"), getMyHotels);
+// sve booking stvari za hosta
+router.get("/bookings", protect, role("HOST"), getHostBookings);
+
+// analytics za dashboard
 router.get("/analytics", protect, role("HOST"), getHostAnalytics);
-
-router.put("/:id", protect, role("HOST"), updateHotel);
-router.delete("/:id", protect, role("HOST"), deleteHotel);
 
 module.exports = router;
