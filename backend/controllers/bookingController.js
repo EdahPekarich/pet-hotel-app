@@ -150,7 +150,12 @@ exports.rejectBooking = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    // 🔥 OWNER CHECK
+    // 🔥 sigurnosna provjera (OVO TI JE PUCALO)
+    if (!booking.hotel || !booking.hotel.owner) {
+      return res.status(400).json({ message: "Invalid hotel data" });
+    }
+
+    // owner check
     if (booking.hotel.owner.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
@@ -161,11 +166,12 @@ exports.rejectBooking = async (req, res) => {
     await Notification.create({
       user: booking.user,
       message: "Your booking was REJECTED ❌",
-      type: "REJECT" // ✅ FIX
+      type: "REJECT"
     });
 
     res.json(booking);
   } catch (err) {
+    console.log("REJECT ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };
