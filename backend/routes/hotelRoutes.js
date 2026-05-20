@@ -6,25 +6,28 @@ const {
   getHotels,
   getHotelById,
   getBookedDates,
-  getHostAnalytics   // 🔥 DODAJ OVO
 } = require("../controllers/hotelController");
 
 const protect = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
 
-// CREATE HOTEL
-router.post("/", protect, createHotel);
+
+// ---------------- PUBLIC ----------------
 
 // GET ALL HOTELS
 router.get("/", getHotels);
 
-// 🔥 ANALYTICS MORA BITI PRVO (BITNO!)
-router.get("/analytics", protect, role("HOST"), getHostAnalytics);
-
-// GET SINGLE HOTEL
+// GET SINGLE HOTEL (MORA BITI PRIJE /:id/anything)
 router.get("/:id", getHotelById);
 
 // GET BOOKED DATES
 router.get("/:id/booked-dates", getBookedDates);
+
+
+// ---------------- PROTECTED (HOST) ----------------
+
+// CREATE HOTEL
+router.post("/", protect, role("HOST"), createHotel);
+
 
 module.exports = router;
