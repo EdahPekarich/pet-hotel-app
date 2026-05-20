@@ -7,7 +7,7 @@ export default function HotelMap() {
   const [hotels, setHotels] = useState([]);
 
   useEffect(() => {
-    API.get("/hotels").then((res) => setHotels(res.data));
+    API.get("/api/hotels").then((res) => setHotels(res.data));
   }, []);
 
   return (
@@ -37,8 +37,8 @@ export default function HotelMap() {
           const lat = h.location?.coordinates?.lat;
           const lng = h.location?.coordinates?.lng;
 
-          if (!lat || !lng) return null;
-
+if (lat == null || lng == null) return null;
+        
           return (
             <Marker key={h._id} position={[lat, lng]}>
               <Popup>
