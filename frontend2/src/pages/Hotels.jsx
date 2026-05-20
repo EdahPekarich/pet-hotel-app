@@ -127,7 +127,7 @@ export default function Hotels() {
               €{h.pricePerNight} / night
             </p>
 
-            <Link to={`/api/hotel/${h._id}`}>
+           <Link to={`/hotel/${h._id}`}>
               <button style={{
                 marginTop: 10,
                 width: "100%",
