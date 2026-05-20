@@ -12,8 +12,7 @@ dotenv.config();
 const app = express();
 
 // middleware
-
-
+app.use(cors());
 app.use(express.json());
 
 // connect database
@@ -22,9 +21,9 @@ connectDB();
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/hotels", hotelRoutes);
-// test route
-
 app.use("/api/bookings", bookingRoutes);
+
+// test route
 app.get("/api/health", (req, res) => {
   res.json({ message: "Backend is working 🚀" });
 });
