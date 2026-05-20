@@ -4,11 +4,13 @@ const router = express.Router();
 const {
   createHotel,
   getHotels,
-  getHotelById,   // 🔥 DODANO
+  getHotelById,
   getBookedDates,
+  getHostAnalytics   // 🔥 DODAJ OVO
 } = require("../controllers/hotelController");
 
 const protect = require("../middleware/authMiddleware");
+const role = require("../middleware/roleMiddleware");
 
 // CREATE HOTEL
 router.post("/", protect, createHotel);
@@ -16,7 +18,10 @@ router.post("/", protect, createHotel);
 // GET ALL HOTELS
 router.get("/", getHotels);
 
-// 🔥 GET SINGLE HOTEL (FIX ZA 404)
+// 🔥 ANALYTICS MORA BITI PRVO (BITNO!)
+router.get("/analytics", protect, role("HOST"), getHostAnalytics);
+
+// GET SINGLE HOTEL
 router.get("/:id", getHotelById);
 
 // GET BOOKED DATES
